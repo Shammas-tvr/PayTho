@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Company Dashboard</title>
+</head>
+<body>
+
+<h1>Company Dashboard</h1>
+
+<p>Welcome, {{ user.username }}</p>
+<p>Company: {{ company.name }}</p>
+<p>Company Code: {{ company.company_code }}</p>
+
+<hr>
+
+<h3>Management</h3>
+
+<ul>
+
+    {% if user.role == "COMPANY_ADMIN" %}
+        <li><a href="{% url 'create_branch' %}">Create Branch</a></li>
+        <li><a href="{% url 'create_staff' %}">Create Staff</a></li>
+    {% endif %}
+
+    {% if user.role == "COMPANY_ADMIN" or user.role == "MANAGER" %}
+        <li><a href="#">Reports</a></li>
+    {% endif %}
+
+    <li><a href="#">Logout</a></li>
+
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<h2>Create Company</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Company Name" required><br><br>
+
+    <input type="text" name="company_code" placeholder="Company Code" required><br><br>
+
+    <h4>Company Admin Details</h4>
+
+    <input type="text" name="admin_username" placeholder="Admin Username" required><br><br>
+
+    <input type="password" name="admin_password" placeholder="Admin Password" required><br><br>
+
+    <button type="submit">Create Company</button>
+</form>
+
+{% if error %}
+<p style="color:red">{{ error }}</p>
+{% endif %}

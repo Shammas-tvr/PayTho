@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Panel</title>
+</head>
+<body>
+
+<h1>Control Panel</h1>
+<p>Welcome, {{ request.user.username }}</p>
+
+<hr>
+
+<h3>Platform Actions</h3>
+
+<ul>
+    <li><a href="{% url 'create_company' %}">Create Company</a></li>
+    <li><a href="#">Django Admin</a></li>
+    <li><a href="#">Logout</a></li>
+</ul>
+
+</body>
+</html>

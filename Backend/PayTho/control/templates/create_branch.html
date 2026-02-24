@@ -1,0 +1,11 @@
+<h2>Create Branch</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Branch Name" required><br><br>
+
+    <input type="text" name="location" placeholder="Location"><br><br>
+
+    <button type="submit">Create Branch</button>
+</form>
