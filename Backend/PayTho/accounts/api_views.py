@@ -1,49 +1,59 @@
-from django.shortcuts import render,redirect
+
 from django.contrib.auth import authenticate,login 
 from company.models import Company
 from accounts.models import CustomUser
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseForbidden
-# Create your views here.
+from rest_framework_simplejwt.tokens  import RefreshToken
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
 
 # Create your views here.
+@api_view(["POST"])
+def company_login_api(request):
+
+    print("DATA:", request.data) 
+
+    company_code = request.data.get("company_code")
+    username = request.data.get("username")
+    password = request.data.get("password")
 
 
-def company_login(request):
-    if request.method == "POST":
-        company_code = request.POST.get("company_code")
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-
-        try:
-            company = Company.objects.get(
-                company_code=company_code,
-                is_active=True
-            )
-        except Company.DoesNotExist:
-            return render(request, "company_login.html", {
-                "error": "Invalid company code"
-            })
-
-        user = authenticate(
-            request,
-            username=username,
-            password=password
+    try:
+        company = Company.objects.get(
+            company_code=company_code,
+            is_active=True
+        )
+    except Company.DoesNotExist:
+        return Response(
+            {"error":"invalid company code"},
+            status=status.HTTP_400_BAD_REQUEST
         )
 
-        if (
-            user is not None
-            and user.company == company
-            and user.is_active
-        ):
-            login(request, user)
-            return redirect("company_dashboard")
+    user = authenticate(request,username=username,password=password)
+    print("USER:", user)
 
-        return render(request, "company_login.html", {
-            "error": "Invalid credentials"
+    if (
+        user is not None
+        and user.company == company
+        and user.is_active
+    ):
+        refresh=RefreshToken.for_user(user)
+
+        return Response({
+            "refresh":str(refresh),
+            "access":str(refresh.access_token),
+            "role":user.role,
+            "company":user.company.name
         })
+    
+    return Response(
+        {"error":"invalid credentials"},
+        status=status.HTTP_401_UNAUTHORIZED
+    )
+        
 
-    return render(request, "company_login.html")  
+
 
 
 
