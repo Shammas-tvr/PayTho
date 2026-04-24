@@ -12,8 +12,8 @@ class CustomUser(AbstractUser):
         CASHIER = "CASHIER", "Cashier"
 
     role=models.CharField(max_length=20,choices=Roles.choices,default=Roles.STAFF)
-    company=models.ForeignKey("company.Company",on_delete=models.CASCADE,null=True,blank=True,related_name="users")
-    branch=models.ForeignKey("company.Branch",on_delete=models.SET_NULL,null=True,blank=True,related_name="users")  
+    company=models.ForeignKey("companies.Company",on_delete=models.CASCADE,null=True,blank=True,related_name="users")
+    branch=models.ForeignKey("companies.Branch",on_delete=models.SET_NULL,null=True,blank=True,related_name="users")  
 
 
     def is_superadmin(self):

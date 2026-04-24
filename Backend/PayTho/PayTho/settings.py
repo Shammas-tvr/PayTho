@@ -39,9 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-    'control',
-    'company',
+    'branches',
+    'companies',
+    'dashboard',
+    'staff',
     'rest_framework',
+# inventory
+# billing
+# sales
+# reports
 
 ]
 
