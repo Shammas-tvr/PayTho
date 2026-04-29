@@ -32,6 +32,23 @@ def superadmin_login_api(request):
         status=status.HTTP_401_UNAUTHORIZED
     )
 
+
+# checking user logged or log out 
+@api_view(["GET"])
+def check_auth_api(request):
+
+    if request.user.is_authenticated:
+        return Response({
+            "authenticated": True,
+            "username": request.user.username
+        }, status=200)
+
+    return Response({
+        "authenticated": False
+    }, status=401)
+    
+
+
 # Create your views here.
 @api_view(["POST"])
 def company_login_api(request):
