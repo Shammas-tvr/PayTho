@@ -14,24 +14,23 @@ def superadmin_login_api(request):
     username=request.data.get("username")
     password=request.data.get("password")
 
-    user=authenticate(request,username=username,password=password)
+    user=authenticate(username=username,password=password)
+
 
     if user is not None and user.role == CustomUser.Roles.SUPERADMIN:
-        login(request,user)
 
-        return Response(
-            {
-                "message":"superadmin login successful",
-                "username":user.username,
-                "redirect":"superadmin_dashbaord"
-            },
-            status=status.HTTP_200_OK
-        )
+        refresh=RefreshToken.for_user(user)
+
+        return Response({
+            "access": str(refresh.access_token),
+            "refresh": str(refresh),
+            "username": user.username
+        }, status=status.HTTP_200_OK)
+
     return Response(
-        {"error":"invalid superadmin credentials"},
+        {"error": "invalid superadmin credentials"},
         status=status.HTTP_401_UNAUTHORIZED
     )
-
 
 # checking user logged or log out 
 @api_view(["GET"])

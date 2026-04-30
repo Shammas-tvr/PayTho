@@ -65,6 +65,20 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'PayTho.urls'
 
+from datetime import timedelta
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+}
+
 CORS_ALLOWED_ORIGINS =[
     "http://localhost:5173",
 ]

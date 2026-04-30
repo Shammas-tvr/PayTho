@@ -8,6 +8,9 @@ from accounts.models import CustomUser
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def superadmin_dashboard_api(request):
+    print("USER:", request.user)
+    print("ROLE:", getattr(request.user, "role", "NO ROLE"))
+    print("AUTH:", request.auth)
 
     if request.user.role != CustomUser.Roles.SUPERADMIN:
         return Response({"error": "Not allowed"}, status=403)
