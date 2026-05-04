@@ -81,7 +81,6 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",    # ✅ Vite React
-    "http://127.0.0.1:5173",   # ✅ also add this
 ]
 CORS_ALLOW_CREDENTIALS = True
 

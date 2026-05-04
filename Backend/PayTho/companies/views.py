@@ -17,6 +17,7 @@ def create_company_api(request):
     company_code = request.data.get("company_code")
     admin_username = request.data.get("admin_username")
     admin_password = request.data.get("admin_password")
+    email=request.data.get("email")
 
     if Company.objects.filter(company_code=company_code).exists():
         return Response({"error": "Company code already exists"}, status=400)
@@ -29,8 +30,10 @@ def create_company_api(request):
     CustomUser.objects.create_user(
         username=admin_username,
         password=admin_password,
+        email=email,
         role=CustomUser.Roles.COMPANY_ADMIN,
-        company=company
+        company=company,
+    
     )
 
     return Response({

@@ -1,154 +1,168 @@
 // src/pages/superadmin/SuperAdminDashboard.jsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 
 function SuperAdminDashboard() {
   const navigate = useNavigate();
-  const [data, setData] = useState(null);
-  const username = localStorage.getItem("username");
-
-  useEffect(() => {
-    axiosInstance.get("dashboard/superadmin/")
-      .then((res) => setData(res.data))
-      .catch((err) => {
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          localStorage.removeItem("token");
-          navigate("/");
-        }
-      });
-  }, []);
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    company_code: "",
+    admin_username: "",
+    admin_password: "",
+    email: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
+    localStorage.clear();
     navigate("/");
   };
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleCreate = async () => {
+    setError("");
+    setSuccess("");
+
+    if (!form.name || !form.company_code || !form.admin_username || !form.admin_password || !form.email) {
+      setError("All fields are required.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axiosInstance.post("company/create/", form);
+      setSuccess(res.data.message || "Company created successfully!");
+      setForm({ name: "", company_code: "", admin_username: "", admin_password: "", email: "" });
+      setTimeout(() => { setShowModal(false); setSuccess(""); }, 1500);
+    } catch (err) {
+      setError(err.response?.data?.error || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setError("");
+    setSuccess("");
+    setForm({ name: "", company_code: "", admin_username: "", admin_password: "", email: "" });
+  };
+
   return (
-    <div style={s.page}>
+    <div style={{ fontFamily: "Arial, sans-serif", minHeight: "100vh", background: "#f4f4f4" }}>
 
-      {/* Sidebar */}
-      <div style={s.sidebar}>
-        <div style={s.logo}>
-          <div style={s.logoIcon}>P</div>
-          <div>
-            <div style={s.logoName}>PayTho</div>
-            <div style={s.logoSub}>Super Admin</div>
-          </div>
-        </div>
-
-        <nav style={s.nav}>
-          <div style={s.navActive}>Dashboard</div>
-          <div style={s.navItem}>Companies</div>
-          <div style={s.navItem}>Employees</div>
-          <div style={s.navItem}>Settings</div>
-        </nav>
-
-        <button onClick={handleLogout} style={s.logoutBtn}>
-          Logout
-        </button>
-      </div>
-
-      {/* Main */}
-      <div style={s.main}>
-
-        {/* Top bar */}
-        <div style={s.topbar}>
-          <div>
-            <div style={s.pageTitle}>Dashboard</div>
-            <div style={s.pageSub}>Welcome back, {username || "Admin"}</div>
-          </div>
-          <div style={s.userPill}>{username || "superadmin"}</div>
-        </div>
-
-        {/* Content */}
-        <div style={s.content}>
-
-          {/* Stats */}
-          <div style={s.statsGrid}>
-            <div style={s.statCard}>
-              <div style={s.statLabel}>Total companies</div>
-              <div style={s.statValue}>{data?.total_companies ?? "—"}</div>
-            </div>
-            <div style={s.statCard}>
-              <div style={s.statLabel}>Total employees</div>
-              <div style={s.statValue}>{data?.total_employees ?? "—"}</div>
-            </div>
-            <div style={s.statCard}>
-              <div style={s.statLabel}>Active users</div>
-              <div style={s.statValue}>{data?.active_users ?? "—"}</div>
-            </div>
-            <div style={s.statCard}>
-              <div style={s.statLabel}>Revenue</div>
-              <div style={s.statValue}>{data?.total_revenue ?? "—"}</div>
-            </div>
-          </div>
-
-          {/* Companies table */}
-          <div style={s.card}>
-            <div style={s.cardTitle}>Companies</div>
-            <table style={s.table}>
-              <thead>
-                <tr>
-                  <th style={s.th}>Company</th>
-                  <th style={s.th}>Employees</th>
-                  <th style={s.th}>Joined</th>
-                  <th style={s.th}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(data?.companies || []).map((c) => (
-                  <tr key={c.id}>
-                    <td style={s.td}>{c.name}</td>
-                    <td style={s.td}>{c.employee_count}</td>
-                    <td style={s.td}>{c.joined}</td>
-                    <td style={s.td}>
-                      <span style={c.is_active ? s.badgeGreen : s.badgeOrange}>
-                        {c.is_active ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+      {/* Navbar */}
+      <div style={{ background: "#fff", borderBottom: "1px solid #ddd", padding: "12px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontWeight: "700", fontSize: "16px" }}>Super Admin</span>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button onClick={() => setShowModal(true)} style={btn.primary}>
+            + Create Company
+          </button>
+          <button onClick={handleLogout} style={btn.danger}>
+            Logout
+          </button>
         </div>
       </div>
+
+      {/* Page content */}
+      <div style={{ padding: "24px" }}>
+        <p style={{ color: "#888", fontSize: "14px" }}>Welcome to the dashboard.</p>
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 99 }}>
+          <div style={{ background: "#fff", borderRadius: "10px", padding: "24px", width: "400px", maxHeight: "90vh", overflowY: "auto" }}>
+
+            <h3 style={{ margin: "0 0 20px", fontSize: "16px" }}>Create Company</h3>
+
+            {/* Company Info */}
+            <p style={sectionLabel}>Company Info</p>
+
+            <label style={lbl}>Company Name *</label>
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              placeholder="Acme Corp"
+              style={input}
+            />
+
+            <label style={lbl}>Company Code *</label>
+            <input
+              name="company_code"
+              value={form.company_code}
+              onChange={handleChange}
+              placeholder="ACME-001"
+              style={input}
+            />
+
+            <label style={lbl}>Company Email *</label>
+            <input
+              name="email"
+              type="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="admin@acme.com"
+              style={input}
+            />
+
+            {/* Admin User */}
+            <p style={{ ...sectionLabel, marginTop: "16px" }}>Admin User</p>
+
+            <label style={lbl}>Admin Username *</label>
+            <input
+              name="admin_username"
+              value={form.admin_username}
+              onChange={handleChange}
+              placeholder="acme_admin"
+              style={input}
+            />
+
+            <label style={lbl}>Admin Password *</label>
+            <input
+              name="admin_password"
+              type="password"
+              value={form.admin_password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              style={input}
+            />
+
+            {error   && <p style={{ color: "#e02424", fontSize: "12px", margin: "8px 0 0" }}>{error}</p>}
+            {success && <p style={{ color: "#057a55", fontSize: "12px", margin: "8px 0 0" }}>{success}</p>}
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "20px" }}>
+              <button onClick={closeModal} style={btn.cancel}>Cancel</button>
+              <button onClick={handleCreate} disabled={loading} style={btn.primary}>
+                {loading ? "Creating…" : "Create"}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
 
-// ✅ All styles in one place
-const s = {
-  page:       { display:"flex", minHeight:"100vh", background:"#f5f5f3", fontFamily:"Arial, sans-serif" },
-  sidebar:    { width:"200px", background:"#fff", borderRight:"1px solid #eee", display:"flex", flexDirection:"column", padding:"0" },
-  logo:       { display:"flex", alignItems:"center", gap:"10px", padding:"20px 16px", borderBottom:"1px solid #eee" },
-  logoIcon:   { width:"32px", height:"32px", background:"#042C53", borderRadius:"8px", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontWeight:"700", fontSize:"16px" },
-  logoName:   { fontSize:"15px", fontWeight:"700", color:"#111" },
-  logoSub:    { fontSize:"11px", color:"#aaa" },
-  nav:        { flex:1, padding:"12px 0" },
-  navActive:  { padding:"9px 16px", fontSize:"13px", background:"#E6F1FB", color:"#185FA5", fontWeight:"600", cursor:"pointer" },
-  navItem:    { padding:"9px 16px", fontSize:"13px", color:"#555", cursor:"pointer" },
-  logoutBtn:  { margin:"12px 16px", padding:"8px", background:"none", border:"1px solid #eee", borderRadius:"8px", fontSize:"13px", color:"#b91c1c", cursor:"pointer" },
-  main:       { flex:1, display:"flex", flexDirection:"column" },
-  topbar:     { display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 20px", background:"#fff", borderBottom:"1px solid #eee" },
-  pageTitle:  { fontSize:"16px", fontWeight:"700", color:"#111" },
-  pageSub:    { fontSize:"12px", color:"#888", marginTop:"2px" },
-  userPill:   { padding:"6px 14px", background:"#f5f5f3", border:"1px solid #eee", borderRadius:"20px", fontSize:"13px", color:"#555" },
-  content:    { padding:"20px" },
-  statsGrid:  { display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"12px", marginBottom:"16px" },
-  statCard:   { background:"#fff", border:"1px solid #eee", borderRadius:"10px", padding:"16px" },
-  statLabel:  { fontSize:"12px", color:"#888", marginBottom:"6px" },
-  statValue:  { fontSize:"24px", fontWeight:"700", color:"#111" },
-  card:       { background:"#fff", border:"1px solid #eee", borderRadius:"10px", padding:"16px" },
-  cardTitle:  { fontSize:"14px", fontWeight:"700", color:"#111", marginBottom:"14px" },
-  table:      { width:"100%", borderCollapse:"collapse", fontSize:"13px" },
-  th:         { textAlign:"left", color:"#888", fontWeight:"500", paddingBottom:"10px", borderBottom:"1px solid #eee" },
-  td:         { padding:"10px 0", color:"#111", borderBottom:"1px solid #f5f5f3" },
-  badgeGreen: { background:"#f0fdf4", color:"#166534", fontSize:"11px", padding:"2px 8px", borderRadius:"6px" },
-  badgeOrange:{ background:"#fffbeb", color:"#92400e", fontSize:"11px", padding:"2px 8px", borderRadius:"6px" },
+// Reusable styles
+const lbl = { display: "block", fontSize: "12px", color: "#555", marginBottom: "4px", marginTop: "10px" };
+const input = { display: "block", width: "100%", padding: "8px 10px", border: "1px solid #ddd", borderRadius: "6px", fontSize: "13px", boxSizing: "border-box", outline: "none" };
+const sectionLabel = { fontSize: "11px", fontWeight: "700", color: "#888", textTransform: "uppercase", letterSpacing: "0.5px", margin: "0 0 4px" };
+
+const btn = {
+  primary: { padding: "8px 16px", background: "#1a56db", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "13px" },
+  danger:  { padding: "8px 16px", background: "#fff", color: "#e02424", border: "1px solid #e02424", borderRadius: "6px", cursor: "pointer", fontSize: "13px" },
+  cancel:  { padding: "8px 16px", background: "#fff", color: "#555", border: "1px solid #ddd", borderRadius: "6px", cursor: "pointer", fontSize: "13px" },
 };
 
 export default SuperAdminDashboard;

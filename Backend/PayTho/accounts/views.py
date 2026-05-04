@@ -14,10 +14,7 @@ def superadmin_login_api(request):
     username=request.data.get("username")
     password=request.data.get("password")
 
-    user=authenticate(username=username,password=password)
-
-    print("USER FOUND:", user)           # ✅ add this debug line
-    print("USER ROLE:", getattr(user, 'role', 'NO ROLE'))  # ✅ 
+    user=authenticate(username=username,password=password) 
 
 
     if user is not None and user.role == CustomUser.Roles.SUPERADMIN:
