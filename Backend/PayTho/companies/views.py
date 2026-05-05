@@ -43,3 +43,40 @@ def create_company_api(request):
 
 
 
+
+# @api_view(["GET"])
+# @permission_classes([IsAuthenticated])
+# def company_dashboard_api(request):
+
+#     user = request.user
+
+#     if not user.company:
+#         return Response({"error":"No company assigned"},status=403)
+    
+#     company = user.company
+
+#     total_user = CustomUser.objects.filter(company=company).count()
+#     active_user = CustomUser.objects.filter(company=company, is_active=True).count()
+
+#     recent_users = CustomUser.objects.filter(company = company).order_by("-date_joined")[:5]
+
+#     recent_user_data = [
+#         {
+#             "username" : u.username,
+#             "email" : u.email,
+#             "joined" : u.date_joined
+#         }
+#         for u in recent_users
+#     ]
+
+#     return Response({
+#         "company":{
+#             "name":company.name,
+#             "code" : company.company_code,
+#         },
+#         "stats" :{
+#             "total_users" : total_user,
+#              "acitve_users": active_user,
+#         },
+#         "recent_users" : recent_user_data
+#     })
