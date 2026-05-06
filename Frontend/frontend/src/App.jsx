@@ -1,10 +1,12 @@
 // src/App.jsx
-import { BrowserRouter } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/auth/Login';
 
 const App = () => (
   <BrowserRouter>
-    <AppRoutes />
+    <Routes>
+      <Route path="/login" element={<Login />} />
+    </Routes>
   </BrowserRouter>
 );
 
