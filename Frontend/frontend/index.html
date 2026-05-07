@@ -7,12 +7,11 @@
     <meta name="description" content="Paytho ERP — Enterprise Resource Platform" />
     <title>Paytho ERP</title>
 
-    <!-- Favicon -->
-    <link
-      rel="icon"
-      type="image/svg+xml"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231A7FA0'/><text y='.9em' font-size='72' x='12' fill='white'>P</text></svg>"
-    />
+    <!-- ── Favicon — replace old inline SVG with real PNG logos ── -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/paytho-favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/paytho-favicon-16.png" />
+    <!-- Apple touch icon (iPhone home screen) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/paytho-favicon-32.png" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -91,12 +90,14 @@
         z-index: 9999; gap: 16px;
         transition: opacity 0.3s;
       }
-      #app-loader .loader-brand {
-        font-family: 'Sora', sans-serif;
-        font-size: 28px; font-weight: 700;
-        color: var(--text); letter-spacing: -0.5px;
+
+      /* ── logo image in loader ── */
+      #app-loader .loader-logo {
+        width: 80px;
+        height: auto;
+        display: block;
       }
-      #app-loader .loader-brand span { color: var(--blue); }
+
       #app-loader .loader-bar {
         width: 160px; height: 3px;
         background: var(--grey-ll);
@@ -111,7 +112,9 @@
       #app-loader .loader-sub {
         font-size: 12px; color: var(--text-s);
         font-weight: 500; letter-spacing: 0.04em;
+        font-family: 'Plus Jakarta Sans', sans-serif;
       }
+
       @keyframes loaderSlide {
         0%   { transform: translateX(-100%); }
         50%  { transform: translateX(160%);  }
@@ -125,11 +128,30 @@
   </head>
 
   <body>
-    <!-- Splash loader -->
+    <!-- ── Splash loader ── -->
     <div id="app-loader">
-      <div class="loader-brand">Paytho<span>.</span></div>
-      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+
+      <!--
+        Logo image — uses the stamp PNG from public/ folder.
+        File location: public/paytho-stamp-140x175-white.png
+        The stamp already has "Paytho" + "ERP PLATFORM" text baked in,
+        so no separate text element needed.
+      -->
+      <img
+        class="loader-logo"
+        src="/paytho-stamp-140x175-white.png"
+        alt="Paytho ERP"
+        width="80"
+      />
+
+      <!-- Loading bar -->
+      <div class="loader-bar">
+        <div class="loader-bar-fill"></div>
+      </div>
+
+      <!-- Tagline below bar -->
       <div class="loader-sub">Enterprise Resource Platform</div>
+
     </div>
 
     <!-- React root -->

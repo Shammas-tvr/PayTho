@@ -1,13 +1,23 @@
-// src/App.jsx
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import SuperAdminDashboard from './pages/superadmin/SuperAdminDashboard';
 import Login from './pages/auth/Login';
+import NotFound from './pages/errors/NotFound';
 
-const App = () => (
-  <BrowserRouter>
+function App() {
+  useEffect(() => {
+    // Fires after React has painted — safe to hide the splash
+    window.__hideLoader?.();
+  }, []); // empty deps = runs once on mount
+
+  return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login/>} />
+      <Route path="/superadmin/dashboard" element={<SuperAdminDashboard />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
-  </BrowserRouter>
-);
+  );
+}
 
 export default App;
