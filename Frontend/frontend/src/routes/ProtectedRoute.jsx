@@ -1,25 +1,60 @@
 // src/routes/ProtectedRoute.jsx
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate, redirect } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Children, useEffect,useState } from "react";
+import Loader from "../components/common/Loader";
 
-const redirectMap = {
-  SUPERADMIN:    '/superadmin/dashboard',
-  COMPANY_ADMIN: '/admin/dashboard',
-  MANAGER:       '/manager/dashboard',
-  STAFF:         '/staff/dashboard',
-  CASHIER:       '/cashier/dashboard',
+
+
+
+const redirectMap ={
+  // -----------superadmin----------
+  SUPERADMIN: 'superadmin/dashboard',
+
+  // ------------company admins -------
+  COMPANY_ADMIN:   '/admin/dashboard',
+  HR_MANAGER:      '/hr/dashboard',
+  FINANCE_MANAGER: '/finance/dashboard',
+  AUDITOR:         '/auditor/dashboard',
+
+  // ---------Branch level-------
+  MANAGER:   '/manager/dashboard',
+  STAFF:     '/staff/dashboard',
+  CASHIER:   '/cashier/dashboard',
+  SALESMAN:  '/salesman/dashboard',
+
 };
 
-const ProtectedRoute = ({ allowedRoles, children }) => {
-  const { role, isLoggedIn } = useAuth();
+const ProtectedRoute = ({allowedRoles, children}) =>{
+  const {isLoggedIn, role, loading } = useAuth();
 
-  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  const [redirectPath,setRedirectPath]= useState(null);
 
-  if (!allowedRoles.includes(role)) {
-    return <Navigate to={redirectMap[role] || '/login'} replace />;
+  useEffect(()=>{
+    if (loading) return;
+
+    if (!isLoggedIn){
+      setRedirectPath('/login');
+    }
+    else if (role && !allowedRoles.includes(role)){
+      setRedirectPath(redirectMap[role] || '/login');
+    }
+    else{
+      setRedirectPath(null);
+    }
+
+  },[isLoggedIn, role, loading, allowedRoles]);
+
+  if (loading){
+    return <Loader message="Checking Authentication..."/>;
   }
-
+  if (redirectPath){
+    return <Navigate to={redirectPath} replace/>;
+  }
   return children;
 };
 
 export default ProtectedRoute;
+
+
+

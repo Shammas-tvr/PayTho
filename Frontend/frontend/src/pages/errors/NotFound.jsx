@@ -110,15 +110,7 @@ export default function NotFound() {
   );
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Only component-specific styles live here.
-   ✅ Fonts       → already loaded by index.html (Google Fonts)
-   ✅ CSS vars    → already defined in index.html (:root)
-   ✅ Tabler icons→ already linked in index.html
-   ✅ body reset  → already in index.html
-   ✅ scrollbar   → already in index.html
-   ✅ spin anim   → already in index.html
-   ─────────────────────────────────────────────────────────────*/
+
 const s = {
   root: {
     minHeight: '100vh',

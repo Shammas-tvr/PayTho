@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 70" width="360" height="70" role="img">
+<title>Paytho ERP — On Light</title>
+<rect width="360" height="70" rx="14" fill="#F0F8FB" stroke="#90C0D4" stroke-width="1"/>
+<rect x="10" y="10" width="50" height="50" rx="10.0" fill="#C8DDE8"/>
+<rect x="14.0" y="14.0" width="42.0" height="42.0" rx="7.75" fill="white"/>
+<rect x="19.13" y="19.13" width="7.59" height="31.74" rx="3.79" fill="#3A8FB0"/>
+<rect x="28.1" y="19.13" width="22.77" height="15.87" rx="3.45" fill="#3A8FB0"/>
+<rect x="28.1" y="37.76" width="17.25" height="5.87" rx="2.76" fill="#88BDD0"/>
+<rect x="28.1" y="45.01" width="17.25" height="5.87" rx="2.76" fill="#B8DDD8"/>
+<circle cx="45.35" cy="47.95" r="3.08" fill="#2DA898"/>
+<circle cx="45.35" cy="47.95" r="1.69" fill="#7DD4C8"/>
+<text x="74" y="38" font-family="Georgia,serif" font-size="24" font-weight="700" fill="#0E2A36" letter-spacing="-1">Paytho</text>
+<circle cx="175" cy="28" r="4" fill="#2DA898"/>
+<text x="74" y="54" font-family="Arial,sans-serif" font-size="9" font-weight="600" fill="#5A8898" letter-spacing="2.5">ERP PLATFORM</text>
+</svg>

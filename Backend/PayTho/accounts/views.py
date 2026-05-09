@@ -13,10 +13,7 @@ from .serializers import LoginSerializer
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_view(request):
-    """
-    ERP Login API - Final Version
-    Super Admin has completely separate login.
-    """
+
     serializer = LoginSerializer(data=request.data)
     if not serializer.is_valid():
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

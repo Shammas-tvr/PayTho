@@ -4,17 +4,16 @@ import api from '../../api/axios';
 import { saveAuth } from '../../utils/auth';
 import { useAuth } from '../../context/AuthContext';
 
-/* ─── data ──────────────────────────────────────────────────────── */
 const REDIRECT = {
   SUPERADMIN:      '/superadmin/dashboard',
   COMPANY_ADMIN:   '/admin/dashboard',
-  HR_MANAGER:      '/admin/dashboard',
-  FINANCE_MANAGER: '/admin/dashboard',
-  AUDITOR:         '/admin/dashboard',
+  HR_MANAGER:      '/hr/dashboard',
+  FINANCE_MANAGER: '/finance/dashboard',
+  AUDITOR:         '/auditor/dashboard',
   MANAGER:         '/manager/dashboard',
   STAFF:           '/staff/dashboard',
   CASHIER:         '/cashier/dashboard',
-  SALESMAN:        '/staff/dashboard',
+  SALESMAN:        '/salesman/dashboard',
 };
 
 const ROLES = [
@@ -45,15 +44,6 @@ const FEATURES = [
   { icon: 'ti-shield-check',   text: 'Enterprise-grade security'     },
 ];
 
-/* ─── helpers ───────────────────────────────────────────────────── */
-const pwStrength  = (v) => {
-  if (!v) return 0;
-  const bonus = /[A-Z]/.test(v) && /[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v) ? 2 : 0;
-  return Math.min(4, Math.floor(v.length / 3) + bonus);
-};
-const pwClass = (s) => ['', 'weak', 'weak', 'strong', 'vstrong'][s] ?? '';
-
-/* ─── login-specific styles (tokens live in index.html) ─────────── */
 const loginStyles = `
   .login-page {
     min-height: 100vh; display: flex;
@@ -86,12 +76,20 @@ const loginStyles = `
   .deco-3 { width:75px;  height:75px;  bottom:130px; right:10px;  }
 
   .brand { position: relative; z-index: 1; }
-  .brand-icon {
-    width:52px; height:52px; border-radius:14px; background:#fff;
-    display:flex; align-items:center; justify-content:center;
-    margin-bottom:1rem; border:1.5px solid rgba(26,127,160,0.22);
+  .brand-logo {
+    width: clamp(40px, 5vw, 60px);
+    height: clamp(40px, 5vw, 60px);
+    border-radius: clamp(10px, 1.2vw, 16px);
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: clamp(0.6rem, 1vw, 1rem);
+    border: 1.5px solid rgba(26,127,160,0.22);
+    overflow: hidden;
+    padding: clamp(4px, 0.6vw, 8px);
   }
-  .brand-icon i  { font-size:26px; color:var(--blue); }
+  .brand-logo img {
+    width: 100%; height: 100%; object-fit: contain; display: block;
+  }
   .brand-name    { font-family:'Sora',sans-serif; font-size:25px; font-weight:700; color:var(--text); line-height:1.1; }
   .brand-name span { color:var(--blue); }
   .brand-tag     { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-m); font-weight:600; margin-top:5px; }
@@ -185,13 +183,6 @@ const loginStyles = `
     color:var(--text-s); font-size:16px; padding:0; line-height:1;
   }
 
-  /* strength bar */
-  .strength-row { display:flex; gap:4px; margin-top:5px; padding:0 2px; }
-  .s-bar        { flex:1; height:3px; border-radius:2px; background:var(--grey-ll); transition:background 0.3s; }
-  .s-bar.weak   { background:#D4882A; }
-  .s-bar.strong { background:#2DA898; }
-  .s-bar.vstrong{ background:#48B08E; }
-
   /* error */
   .error-box {
     display:flex; align-items:center; gap:8px;
@@ -233,7 +224,6 @@ const Login = () => {
   const [loginType, setLoginType] = useState('superadmin');
   const [form, setForm]           = useState({ email: '', company_code: '', branch_code: '', username: '', password: '' });
   const [showPw, setShowPw]       = useState(false);
-  const [strength, setStrength]   = useState(0);
   const [error, setError]         = useState('');
   const [loading, setLoading]     = useState(false);
 
@@ -243,7 +233,6 @@ const Login = () => {
     setLoginType(role);
     setError('');
     setForm({ email: '', company_code: '', branch_code: '', username: '', password: '' });
-    setStrength(0);
   };
 
   const handleSubmit = async (e) => {
@@ -265,7 +254,7 @@ const Login = () => {
       saveAuth(data);
       setRole(data.role);
       setUser({ username: data.username, company_id: data.company_id, branch_id: data.branch_id });
-      navigate(REDIRECT[data.role] || '/dashboard');
+      navigate(REDIRECT[data.role] || '/login');
     } catch (err) {
       setError(err.response?.data?.error || err.response?.data?.detail || 'Incorrect credentials. Please try again.');
     } finally {
@@ -275,7 +264,6 @@ const Login = () => {
 
   return (
     <>
-      {/* Login-only styles — tokens & globals already in index.html */}
       <style>{loginStyles}</style>
 
       <div className="login-page">
@@ -286,7 +274,10 @@ const Login = () => {
             <div className="deco deco-1" /><div className="deco deco-2" /><div className="deco deco-3" />
 
             <div className="brand">
-              <div className="brand-icon"><i className="ti ti-chart-treemap" /></div>
+              {/* Logo image replaces the icon */}
+              <div className="brand-logo">
+                <img src="/src/assets/logos/paytho-hero-mark.svg" alt="Paytho logo" />
+              </div>
               <div className="brand-name">Paytho<span>.</span></div>
               <div className="brand-tag">Enterprise Resource Platform</div>
             </div>
@@ -343,7 +334,6 @@ const Login = () => {
                 </div>
               ))}
 
-              {/* Password */}
               <div className="field-group">
                 <div className="field-wrap">
                   <i className="ti ti-lock field-icon" />
@@ -352,7 +342,7 @@ const Login = () => {
                     type={showPw ? 'text' : 'password'}
                     className="field-input" placeholder=" "
                     value={form.password}
-                    onChange={(e) => { handleChange(e); setStrength(pwStrength(e.target.value)); }}
+                    onChange={handleChange}
                     autoComplete="current-password"
                     style={{ paddingRight: '44px' }}
                     required
@@ -361,11 +351,6 @@ const Login = () => {
                   <button type="button" className="pw-toggle" onClick={() => setShowPw(!showPw)}>
                     <i className={`ti ${showPw ? 'ti-eye-off' : 'ti-eye'}`} />
                   </button>
-                </div>
-                <div className="strength-row">
-                  {[1, 2, 3, 4].map((n) => (
-                    <div key={n} className={`s-bar${strength >= n ? ' ' + pwClass(strength) : ''}`} />
-                  ))}
                 </div>
               </div>
 

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 90" width="500" height="90" role="img">
+<title>Paytho ERP — Horizontal</title>
+<rect width="500" height="90" fill="white"/>
+<rect x="12" y="10" width="70" height="70" rx="14.0" fill="#C8DDE8"/>
+<rect x="17.6" y="15.6" width="58.8" height="58.8" rx="10.85" fill="white"/>
+<rect x="24.78" y="22.78" width="10.63" height="44.44" rx="5.31" fill="#3A8FB0"/>
+<rect x="37.34" y="22.78" width="31.88" height="22.22" rx="4.83" fill="#3A8FB0"/>
+<rect x="37.34" y="48.86" width="24.15" height="8.21" rx="3.86" fill="#88BDD0"/>
+<rect x="37.34" y="59.01" width="24.15" height="8.21" rx="3.86" fill="#B8DDD8"/>
+<circle cx="61.49" cy="63.11" r="4.31" fill="#2DA898"/>
+<circle cx="61.49" cy="63.11" r="2.37" fill="#7DD4C8"/>
+<text x="96" y="51" font-family="Georgia,serif" font-size="40" font-weight="700" fill="#0E2A36" letter-spacing="-1.5">Paytho</text>
+<circle cx="302" cy="37" r="5.5" fill="#2DA898"/>
+<text x="96" y="70" font-family="Arial,sans-serif" font-size="11" font-weight="600" fill="#5A8898" letter-spacing="3">ENTERPRISE RESOURCE PLATFORM</text>
+</svg>

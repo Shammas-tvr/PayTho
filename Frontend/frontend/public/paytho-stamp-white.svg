@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 205" width="170" height="205" role="img">
+<title>Paytho ERP — Stamp White</title>
+<rect width="170" height="205" fill="white"/>
+<rect x="15" y="8" width="140" height="140" rx="28.0" fill="#C8DDE8"/>
+<rect x="26.2" y="19.2" width="117.6" height="117.6" rx="21.7" fill="white"/>
+<rect x="40.56" y="33.56" width="21.25" height="88.87" rx="10.63" fill="#3A8FB0"/>
+<rect x="65.68" y="33.56" width="63.76" height="44.44" rx="9.66" fill="#3A8FB0"/>
+<rect x="65.68" y="85.73" width="48.3" height="16.42" rx="7.73" fill="#88BDD0"/>
+<rect x="65.68" y="106.01" width="48.3" height="16.42" rx="7.73" fill="#B8DDD8"/>
+<circle cx="113.98" cy="114.22" r="8.62" fill="#2DA898"/>
+<circle cx="113.98" cy="114.22" r="4.74" fill="#7DD4C8"/>
+<text x="85" y="166" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-weight="700" fill="#0E2A36" letter-spacing="-.8">Paytho</text>
+<text x="85" y="183" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="600" fill="#5A8898" letter-spacing="2.5">ERP PLATFORM</text>
+<rect x="28" y="193" width="114" height="4" rx="2" fill="#2DA898"/>
+</svg>

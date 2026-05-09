@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img">
+<title>Paytho ERP — Icon 64</title>
+<rect width="64" height="64" rx="12.8" fill="#C8DDE8"/>
+<rect x="5.12" y="5.12" width="53.76" height="53.76" rx="9.92" fill="white"/>
+<rect x="11.69" y="11.69" width="9.72" height="40.63" rx="4.86" fill="#3A8FB0"/>
+<rect x="23.17" y="11.69" width="29.15" height="20.31" rx="4.42" fill="#3A8FB0"/>
+<rect x="23.17" y="35.53" width="22.08" height="7.51" rx="3.53" fill="#88BDD0"/>
+<rect x="23.17" y="44.81" width="22.08" height="7.51" rx="3.53" fill="#B8DDD8"/>
+<circle cx="45.25" cy="48.57" r="3.94" fill="#2DA898"/>
+<circle cx="45.25" cy="48.57" r="2.17" fill="#7DD4C8"/>
+</svg>
